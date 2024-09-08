@@ -23,6 +23,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
 
+    - name: Pull
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git checkout main
+        git pull origin main
+    
     - name: Run script
       run: python fetch_data.py
       env:
@@ -37,10 +44,6 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git checkout main
-        git pull origin main
         git add output.txt
         git commit -m "Update output(txt)"
         git push origin main
