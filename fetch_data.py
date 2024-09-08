@@ -17,10 +17,8 @@ response = requests.get(url, params=params)
 # 检查响应状态码
 if response.status_code == 200:
     data = response.json()
-    print(data)
-    data1 = json.loads(data)
     with open('output.txt', 'w') as file:
-    file.write(data1["username"]+","+data1[followers_count]"\n")
+    file.write(data["username"]+","+data["followers_count"]"\n")
     print("数据成功写入 output.txt 文件")
 else:
     print(f"请求失败，状态码: {response.status_code}")
