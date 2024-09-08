@@ -1,6 +1,7 @@
 import requests
 import os
 import json
+import datetime
 
 # 从环境变量中获取 Access Token
 access_token = os.getenv('FB_ACCESS_TOKEN')
@@ -16,13 +17,13 @@ response = requests.get(url, params=params)
 
 # 检查响应状态码
 if response.status_code == 200:
-    data = response.json()
-    username = data.get("username", "未知用户名") 
-    followers_count = data.get("followers_count", "未知粉丝数") 
-
+    data = (response.json()).get("business_discovery")
+    username = data.get('username', "未知用户名")
+    followers_count = data.get('followers_count', "未知粉丝数")
+    time = datetime.now()
 # 将数据写入文件
     with open('output.txt', 'w') as file:
-        file.write(f"{username},{followers_count}\n") 
+        file.write(f"{username},{followers_count},{time}\n") 
         
 else:
     print(f"请求失败，状态码: {response.status_code}")
