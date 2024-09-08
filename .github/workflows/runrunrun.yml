@@ -3,6 +3,7 @@ name: Fetch Facebook API Data
 on:
   schedule:
     - cron: '*/5 * * * *' 
+  workflow_dispatch:
 
 jobs:
   run-fetch-script:
