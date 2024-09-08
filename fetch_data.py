@@ -5,7 +5,7 @@ import json
 # 从环境变量中获取 Access Token
 access_token = os.getenv('FB_ACCESS_TOKEN')
 # 设置 API 端点和 Access Token
-url = os.getenu('URL')
+url = os.getenv('URL')
 params = {
     'fields': 'business_discovery.username(yezyizhere){followers_count,username}',
     'access_token': access_token
