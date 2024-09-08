@@ -27,3 +27,17 @@ jobs:
       run: python fetch_data.py
       env:
         FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }} 
+
+    - name: Upload JSON file
+      uses: actions/upload-artifact@v3
+      with:
+        name: output_data
+        path: output_data.json  # 指定生成的 JSON 文件路径
+
+    - name: Commit and push changes
+      run: |
+        git config --global glossimute 'github-actions[bot]'
+        git config --global lifepattern_@outlook.com 'github-actions[bot]@users.noreply.github.com'
+        git add output_data.json
+        git commit -m "Update output data (JSON)"
+        git push
