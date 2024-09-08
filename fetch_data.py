@@ -1,7 +1,7 @@
 import requests
 import os
 import json
-import datetime
+from datetime import datetime
 
 # 从环境变量中获取 Access Token
 access_token = os.getenv('FB_ACCESS_TOKEN')
