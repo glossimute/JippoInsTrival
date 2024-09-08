@@ -22,7 +22,7 @@ if response.status_code == 200:
     followers_count = data.get('followers_count', "未知粉丝数")
     time = datetime.now()
 # 将数据写入文件
-    with open('output.txt', 'w') as file:
+    with open('output.txt', 'a') as file:
         file.write(f"{username},{followers_count},{time}\n") 
         
 else:
