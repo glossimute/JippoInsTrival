@@ -1,8 +1,6 @@
 name: Fetch Facebook API Data
 
 on:
-  schedule:
-    - cron: '20,50 * * * *' # 每半小时运行一次
   workflow_dispatch:
 
 permissions:
