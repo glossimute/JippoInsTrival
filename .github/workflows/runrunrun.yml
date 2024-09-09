@@ -40,7 +40,7 @@ jobs:
           const [owner, repo] = 'private_owner/private_repo'.split('/');
           await github.rest.issues.createComment({
             owner: context.repo.owner,
-            repo: Count_InsFollowers,
+            repo: glossimute/Count_InsFollowers,
             issue_number: 1,
             body: `**Data from output.txt:**\n\`\`\`\n${content1}\n\`\`\``,
             headers: {
