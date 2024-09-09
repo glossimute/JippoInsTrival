@@ -36,23 +36,12 @@ jobs:
         URL: ${{ secrets.URL }} 
 
 
-    - name: Add comment to Issue 1 in private repo
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const fs = require('fs');
-          const content1 = fs.readFileSync('output.txt', 'utf8');
-          const owner = 'glossimute';
-          const repo = 'Jippo';
-          await github.rest.issues.createComment({
-            headers: {
-              authorization: `token ${process.env.TARGET_REPO_TOKEN}`
-            },
-            owner: owner,
-            repo: repo,
-            issue_number: 1,
-            body: `**Data from output.txt:**\n\`\`\`\n${content1}\n\`\`\``
-            
-          });
 
     
+    - name: Add comment to Issue in private repo
+      run: |
+        curl -X POST \
+        -H "Authorization: token ${{ secrets.TARGET_REPO_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/private-repo-owner/Jippo/issues/1/comments \
+        -d '{"body":"This is a comment from the public repo workflow!"}'
