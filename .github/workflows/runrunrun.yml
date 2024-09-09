@@ -36,13 +36,13 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const content1 = fs.readFileSync('output_1.txt', 'utf8');
+          const content1 = fs.readFileSync('output.txt', 'utf8');
           const [owner, repo] = 'private_owner/private_repo'.split('/');
           await github.rest.issues.createComment({
             owner: context.repo.owner,
             repo: Count_InsFollowers,
             issue_number: 1,
-            body: `**Data from output_1.txt:**\n\`\`\`\n${content1}\n\`\`\``,
+            body: `**Data from output.txt:**\n\`\`\`\n${content1}\n\`\`\``,
             headers: {
               authorization: `token ${process.env.TARGET_REPO_TOKEN}`
             }
