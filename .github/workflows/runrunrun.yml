@@ -2,7 +2,7 @@ name: Fetch Facebook API Data
 
 on:
   schedule:
-    - cron: '*/5 * * * *' 
+    - cron: '20,50 * * * *' # 每半小时运行一次
   workflow_dispatch:
 
 jobs:
@@ -22,28 +22,46 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install requests
+        pip install pytz
 
-    - name: Pull
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git checkout main
-        git pull origin main
-    
     - name: Run script
       run: python fetch_data.py
       env:
         FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }} 
         URL: ${{ secrets.URL }} 
+        ONE: ${{ secrets.ONE }} 
+        THREE: ${{ secrets.THREE }} 
 
-    - name: Upload txt file
-      uses: actions/upload-artifact@v3
+    - name: Add comment to Issue 1 in private repo
+      uses: actions/github-script@v6
       with:
-        name: output_data
-        path: output.txt 
+        script: |
+          const fs = require('fs');
+          const content1 = fs.readFileSync('output_1.txt', 'utf8');
+          const [owner, repo] = 'private_owner/private_repo'.split('/');
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: Count_InsFollowers,
+            issue_number: 1,
+            body: `**Data from output_1.txt:**\n\`\`\`\n${content1}\n\`\`\``,
+            headers: {
+              authorization: `token ${process.env.TARGET_REPO_TOKEN}`
+            }
+          });
 
-    - name: Commit and push changes
-      run: |
-        git add output.txt
-        git commit -m "Update output(txt)"
-        git push origin main
+    - name: Add comment to Issue 3 in private repo
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const content3 = fs.readFileSync('output_3.txt', 'utf8');
+          const [owner, repo] = 'private_owner/private_repo'.split('/');
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: Count_InsFollowers,
+            issue_number: 3,
+            body: `**Data from output_3.txt:**\n\`\`\`\n${content3}\n\`\`\``,
+            headers: {
+              authorization: `token ${process.env.TARGET_REPO_TOKEN}`
+            }
+          });
