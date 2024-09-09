@@ -43,7 +43,9 @@ jobs:
             repo: repo,
             issue_number: 1,
             body: `**Data from output.txt:**\n\`\`\`\n${content1}\n\`\`\``,
-            
+            headers: {
+              authorization: `token ${process.env.TARGET_REPO_TOKEN}`
+            }
           });
 
     
