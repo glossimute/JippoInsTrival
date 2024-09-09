@@ -1,1 +1,29 @@
+name: Workflow 1
+
+on:
+  workflow_run:
+    workflows: ["Fetch Facebook API Data"]
+    types:
+      - completed
+  workflow_dispatch: # 手动触发
+  schedule:
+    - cron: '0 0 * * *' # 可选，定时触发
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run script
+        run: echo "Running Workflow 1"
+
+      - name: Trigger Workflow 2
+        run: |
+          curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/workflow2.yml/dispatches \
+          -d '{"ref":"main"}'
 
