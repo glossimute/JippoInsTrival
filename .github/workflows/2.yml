@@ -1,13 +1,7 @@
 name: Workflow 1
 
 on:
-  workflow_run:
-    workflows: ["Fetch Facebook API Data"]
-    types:
-      - completed
-  workflow_dispatch: # 手动触发
-  schedule:
-    - cron: '0 0 * * *' # 可选，定时触发
+  workflow_dispatch: # 手动
 
 jobs:
   job1:
