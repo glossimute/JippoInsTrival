@@ -40,9 +40,10 @@ jobs:
         script: |
           const fs = require('fs');
           const content1 = fs.readFileSync('output.txt', 'utf8');
+          const owner = 'glossimute';
           const repo = 'Jippo';
           await github.rest.issues.createComment({
-            owner: context.repo.owner,
+            owner: owner,
             repo: repo,
             issue_number: 1,
             body: `**Data from output.txt:**\n\`\`\`\n${content1}\n\`\`\``,
