@@ -29,7 +29,6 @@ jobs:
         ONE: ${{ secrets.ONE }} 
         THREE: ${{ secrets.THREE }} 
 
-
     - name: Add comment to Issue 1 using curl
       run: |
         REPO_OWNER=${{ secrets.REPO_OWNER }}
@@ -45,7 +44,7 @@ jobs:
           "body": "**Data from output_1.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
         }
         EOF
-     
+
     - name: Add comment to Issue 3 using curl
       run: |
         REPO_OWNER=${{ secrets.REPO_OWNER }}
@@ -61,11 +60,11 @@ jobs:
           "body": "**Data from output_3.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
         }
         EOF
-    
-        - name: Trigger Workflow 1
-          run: |
-          curl -X POST \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/actions/workflows/run1.yml/dispatches \
-          -d '{"ref":"main"}'
+
+    - name: Trigger Workflow 1
+      run: |
+        curl -X POST \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/${{ github.repository }}/actions/workflows/run1.yml/dispatches \
+        -d '{"ref":"main"}'
