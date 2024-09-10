@@ -2,28 +2,48 @@ import requests
 import os
 import json
 from datetime import datetime
+import pytz
+import time
 
-# 从环境变量中获取 Access Token
+# 获取环境变量
 access_token = os.getenv('FB_ACCESS_TOKEN')
-# 设置 API 端点和 Access Token
 url = os.getenv('URL')
-params = {
-    'fields': 'business_discovery.username(yezyizhere){followers_count,username}',
+one = os.getenv('ONE')
+three = os.getenv('THREE')
+
+# 设置请求参数
+params1 = {
+    'fields': 'business_discovery.username(' + one + '){followers_count,username}',
+    'access_token': access_token
+}
+params2 = {
+    'fields': 'business_discovery.username(' + three + '){followers_count,username}',
     'access_token': access_token
 }
 
-# 发起 GET 请求
-response = requests.get(url, params=params)
+# 设置时区和时间格式
+korea_timezone = pytz.timezone('Asia/Seoul')
 
-# 检查响应状态码
-if response.status_code == 200:
-    data = (response.json()).get("business_discovery")
-    username = data.get('username', "未知用户名")
-    followers_count = data.get('followers_count', "未知粉丝数")
-    time = datetime.now()
-# 将数据写入文件
-    with open('output.txt', 'a') as file:
-        file.write(f"{username},{followers_count},{time}\n") 
-        
-else:
-    print(f"请求失败，状态码: {response.status_code}")
+def fetch_and_write_data(username, params, filename):
+    # 获取当前时间
+    time_now = datetime.now(korea_timezone)
+    formatted_time = time_now.strftime('%Y-%m-%d %H:%M:%S')
+
+    # 发送请求并处理响应
+    try:
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            data = response.json().get("business_discovery")
+            followers_count = data.get('followers_count', "未知粉丝数")
+            with open(filename, 'a') as file:
+                file.write(f"{username},{followers_count},{formatted_time}\n")
+        else:
+            print(f"请求失败，状态码: {response.status_code}")
+    except Exception as e:
+        print(f"发生错误: {e}")
+
+# 每小时运行一次脚本
+for _ in range(10):  # 每小时 60 分钟 / 每 5 分钟 = 12 次
+    fetch_and_write_data('1', params1, 'output_1.txt')
+    fetch_and_write_data('3', params2, 'output_3.txt')
+    time.sleep(170)  # 每 5 分钟运行一次
