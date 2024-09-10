@@ -36,7 +36,7 @@ def fetch_and_write_data(username, params, filename):
             data = response.json().get("business_discovery")
             followers_count = data.get('followers_count', "未知粉丝数")
             with open(filename, 'a') as file:
-                file.write(f"{username},{followers_count},{formatted_time}\n")
+                file.write(f"{username},{followers_count},{formatted_time}\\n")
         else:
             print(f"请求失败，状态码: {response.status_code}")
     except Exception as e:
