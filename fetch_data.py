@@ -42,7 +42,7 @@ def fetch_and_write_data(username, params, filename):
     except Exception as e:
         print(f"发生错误: {e}")
 
-for _ in range(10):
+for _ in range(12):
     fetch_and_write_data('1', params1, 'output_1.txt')
     fetch_and_write_data('3', params2, 'output_3.txt')
-    time.sleep(175)
+    time.sleep(290)
