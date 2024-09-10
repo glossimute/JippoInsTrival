@@ -43,7 +43,7 @@ def fetch_and_write_data(username, params, filename):
         print(f"发生错误: {e}")
 
 # 每小时运行一次脚本
-for _ in range(10):  # 每小时 60 分钟 / 每 5 分钟 = 12 次
+# for _ in range(10):  # 每小时 60 分钟 / 每 5 分钟 = 12 次
     fetch_and_write_data('1', params1, 'output_1.txt')
     fetch_and_write_data('3', params2, 'output_3.txt')
-    time.sleep(170)  # 每 5 分钟运行一次
+    # time.sleep(170)  # 每 5 分钟运行一次
