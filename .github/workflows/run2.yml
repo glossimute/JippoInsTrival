@@ -30,66 +30,15 @@ jobs:
         THREE: ${{ secrets.THREE }} 
 
     - name: Send email with output_1.txt data
+      run: python send.py
       env:
         EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
         EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
         EMAIL_USER: ${{ secrets.EMAIL_USER }}
         EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
         EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}  # 接收者的电子邮件地址
-      run: |
-        import smtplib
-        from email.mime.text import MIMEText
-        from email.mime.multipart import MIMEMultipart
-
-        sender_email = "${{ secrets.EMAIL_USER }}"
-        subject = "Data from output_1.txt"
-        body = "Data from output_1.txt:\n$(cat output_1.txt)"
-
-        # 创建邮件对象
-        message = MIMEMultipart()
-        message["From"] = sender_email
-        message["To"] = "${{ secrets.EMAIL_RECEIVER }}"
-        message["Subject"] = subject
-        message.attach(MIMEText(body, "plain"))
-
-        # 连接到 SMTP 服务器并发送邮件
-        server = smtplib.SMTP("${{ secrets.EMAIL_HOST }}", "${{ secrets.EMAIL_PORT }}")
-        server.starttls()  # 启用 TLS
-        server.login(sender_email, "${{ secrets.EMAIL_PASS }}")
-        text = message.as_string()
-        server.sendmail(sender_email, "${{ secrets.EMAIL_RECEIVER }}", text)
-        server.quit()
-
-    - name: Send email with output_3.txt data
-      env:
-        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
-        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
-        EMAIL_USER: ${{ secrets.EMAIL_USER }}
-        EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-        EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}  # 接收者的电子邮件地址
-      run: |
-        import smtplib
-        from email.mime.text import MIMEText
-        from email.mime.multipart import MIMEMultipart
-
-        sender_email = "${{ secrets.EMAIL_USER }}"
-        subject = "Data from output_3.txt"
-        body = "Data from output_3.txt:\n$(cat output_3.txt)"
-
-        # 创建邮件对象
-        message = MIMEMultipart()
-        message["From"] = sender_email
-        message["To"] = "${{ secrets.EMAIL_RECEIVER }}"
-        message["Subject"] = subject
-        message.attach(MIMEText(body, "plain"))
-
-        # 连接到 SMTP 服务器并发送邮件
-        server = smtplib.SMTP("${{ secrets.EMAIL_HOST }}", "${{ secrets.EMAIL_PORT }}")
-        server.starttls()  # 启用 TLS
-        server.login(sender_email, "${{ secrets.EMAIL_PASS }}")
-        text = message.as_string()
-        server.sendmail(sender_email, "${{ secrets.EMAIL_RECEIVER }}", text)
-        server.quit()
+      
+        
 
     # - name: Trigger Workflow 1
     #   run: |
