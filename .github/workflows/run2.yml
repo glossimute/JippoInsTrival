@@ -29,42 +29,72 @@ jobs:
         ONE: ${{ secrets.ONE }} 
         THREE: ${{ secrets.THREE }} 
 
-    - name: Add comment to Issue 1 using curl
+    - name: Send email with output_1.txt data
+      env:
+        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}  # 接收者的电子邮件地址
       run: |
-        REPO_OWNER=${{ secrets.REPO_OWNER }}
-        REPO_NAME=${{ secrets.REPO_NAME }} 
-        ISSUE_NUMBER=1
-        COMMENT_BODY=$(cat output_1.txt)
-        curl -X POST \
-            -H "Authorization: token ${{ secrets.PERSONAL_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-         https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/comments \
-          -d @- <<EOF
-        {
-          "body": "**Data from output_1.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
-        }
-        EOF
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
 
-    - name: Add comment to Issue 3 using curl
+        sender_email = "${{ secrets.EMAIL_USER }}"
+        subject = "Data from output_1.txt"
+        body = "Data from output_1.txt:\n$(cat output_1.txt)"
+
+        # 创建邮件对象
+        message = MIMEMultipart()
+        message["From"] = sender_email
+        message["To"] = "${{ secrets.EMAIL_RECEIVER }}"
+        message["Subject"] = subject
+        message.attach(MIMEText(body, "plain"))
+
+        # 连接到 SMTP 服务器并发送邮件
+        server = smtplib.SMTP("${{ secrets.EMAIL_HOST }}", "${{ secrets.EMAIL_PORT }}")
+        server.starttls()  # 启用 TLS
+        server.login(sender_email, "${{ secrets.EMAIL_PASS }}")
+        text = message.as_string()
+        server.sendmail(sender_email, "${{ secrets.EMAIL_RECEIVER }}", text)
+        server.quit()
+
+    - name: Send email with output_3.txt data
+      env:
+        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}  # 接收者的电子邮件地址
       run: |
-        REPO_OWNER=${{ secrets.REPO_OWNER }}
-        REPO_NAME=${{ secrets.REPO_NAME }} 
-        ISSUE_NUMBER=3
-        COMMENT_BODY=$(cat output_3.txt)
-        curl -X POST \
-            -H "Authorization: token ${{ secrets.PERSONAL_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-         https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/comments \
-          -d @- <<EOF
-        {
-          "body": "**Data from output_3.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
-        }
-        EOF
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+
+        sender_email = "${{ secrets.EMAIL_USER }}"
+        subject = "Data from output_3.txt"
+        body = "Data from output_3.txt:\n$(cat output_3.txt)"
+
+        # 创建邮件对象
+        message = MIMEMultipart()
+        message["From"] = sender_email
+        message["To"] = "${{ secrets.EMAIL_RECEIVER }}"
+        message["Subject"] = subject
+        message.attach(MIMEText(body, "plain"))
+
+        # 连接到 SMTP 服务器并发送邮件
+        server = smtplib.SMTP("${{ secrets.EMAIL_HOST }}", "${{ secrets.EMAIL_PORT }}")
+        server.starttls()  # 启用 TLS
+        server.login(sender_email, "${{ secrets.EMAIL_PASS }}")
+        text = message.as_string()
+        server.sendmail(sender_email, "${{ secrets.EMAIL_RECEIVER }}", text)
+        server.quit()
 
     - name: Trigger Workflow 1
       run: |
         curl -X POST \
         -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/${{ github.repository }}/actions/workflows/run1.yml/dispatches \
+        https://api.github.com/repos/${{  github.repository }}/actions/workflows/run1.yml/dispatches \
         -d '{"ref":"main"}'
